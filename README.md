@@ -42,7 +42,15 @@ A comprehensive Model Context Protocol (MCP) server that exposes the powerful li
 ## Installation
 
 ### Prerequisites
-This MCP server requires libqalculate to be installed on your system.
+
+This MCP server requires [uv](https://docs.astral.sh/uv/) and libqalculate to be installed on your system.
+
+Install uv if you don't have it:
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Install libqalculate for your platform:
 
 #### macOS (using Homebrew)
 ```bash
@@ -60,21 +68,18 @@ Download from [libqalculate releases](https://github.com/Qalculate/libqalculate/
 #### Other Systems
 See the [libqalculate installation guide](https://qalculate.github.io/downloads.html) for your platform.
 
-### Install the MCP Server
+### Clone and Set Up the MCP Server
+
 ```bash
+git clone https://github.com/Genteure/qalc-mcp.git
 cd qalc-mcp
-pip install -e .
+uv sync
 ```
 
 ### Verify Installation
-Test that everything works correctly:
-```bash
-python test_qalc.py
-```
 
-Run the interactive demonstration:
 ```bash
-python examples.py
+uv run mcp run qalc.py
 ```
 
 ## Usage
@@ -383,17 +388,12 @@ The server automatically loads libqalculate's default configuration, including:
 
 ## Testing and Verification
 
-### Run the Test Suite
-Verify all functionality with the comprehensive test suite:
+Verify that libqalculate is installed and accessible:
 ```bash
-python test_qalc.py
+qalc "2+2"
 ```
 
-### Interactive Examples
-Explore capabilities with the demonstration script:
-```bash
-python examples.py
-```
+You should see output like `2 + 2 = 4`.
 
 ## Troubleshooting
 
@@ -433,20 +433,63 @@ python examples.py
 
 ## MCP Integration
 
-This server is designed for seamless integration with MCP-compatible applications:
+This server is designed for seamless integration with MCP-compatible applications. Replace `/path/to/qalc-mcp` with the absolute path to your cloned repository.
 
-- **Claude Desktop**: Add to your MCP configuration
-- **Other MCP Clients**: Use standard MCP protocol
-- **Custom Applications**: Integrate via MCP client libraries
+### Claude Desktop
 
-### Example MCP Configuration
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+
 ```json
 {
   "mcpServers": {
     "qalc": {
-      "command": "python",
-      "args": ["/path/to/qalc-mcp/qalc.py"],
-      "env": {}
+      "command": "uv",
+      "args": ["run", "--directory", "/path/to/qalc-mcp", "mcp", "run", "qalc.py"]
+    }
+  }
+}
+```
+
+### Cursor
+
+Add to your Cursor MCP settings (`~/.cursor/mcp.json` or via **Cursor Settings → MCP**):
+
+```json
+{
+  "mcpServers": {
+    "qalc": {
+      "command": "uv",
+      "args": ["run", "--directory", "/path/to/qalc-mcp", "mcp", "run", "qalc.py"]
+    }
+  }
+}
+```
+
+### VS Code (Cline / Continue)
+
+Add the following to your Cline or Continue MCP server configuration:
+
+```json
+{
+  "mcpServers": {
+    "qalc": {
+      "command": "uv",
+      "args": ["run", "--directory", "/path/to/qalc-mcp", "mcp", "run", "qalc.py"]
+    }
+  }
+}
+```
+
+### Windsurf
+
+Edit `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "qalc": {
+      "command": "uv",
+      "args": ["run", "--directory", "/path/to/qalc-mcp", "mcp", "run", "qalc.py"]
     }
   }
 }
@@ -476,4 +519,4 @@ This MCP server implementation is provided under the MIT License. Libqalculate i
 
 ---
 
-**Ready to get started?** Install libqalculate, run the test suite, and explore the examples!
+**Ready to get started?** Install libqalculate and uv, then add qalc-mcp to your favourite LLM tool!
