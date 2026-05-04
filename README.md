@@ -519,4 +519,4 @@ This MCP server implementation is provided under the MIT License. Libqalculate i
 
 ---
 
-**Ready to get started?** Install libqalculate and uv, then add qalc-mcp to your favourite LLM tool!
+**Ready to get started?** Install libqalculate and uv, then add qalc-mcp to your favorite LLM tool!
